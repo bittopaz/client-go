@@ -132,7 +132,7 @@ func newOIDCAuthProvider(_ string, cfg map[string]string, persister restclient.A
 		return nil, fmt.Errorf("Must provide %s", cfgClientID)
 	}
 
-	config := &config{
+	oidcConfig := &config{
 		issueURL:     issuer,
 		clientID:     clientID,
 		clientSecret: cfg[cfgClientSecret],
@@ -140,7 +140,7 @@ func newOIDCAuthProvider(_ string, cfg map[string]string, persister restclient.A
 		refreshToken: cfg[cfgRefreshToken],
 	}
 	// Check cache for existing provider.
-	if provider, ok := cache.getClient(config); ok {
+	if provider, ok := cache.getClient(oidcConfig); ok {
 		return provider, nil
 	}
 
@@ -178,7 +178,7 @@ func newOIDCAuthProvider(_ string, cfg map[string]string, persister restclient.A
 		persister: persister,
 	}
 
-	return cache.setClient(issuer, clientID, provider), nil
+	return cache.setClient(oidcConfig, provider), nil
 }
 
 type oidcAuthProvider struct {
